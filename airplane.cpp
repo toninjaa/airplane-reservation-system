@@ -23,8 +23,9 @@ void ars();
 bool isSeatEmpty(vector<bool> v, int s);
 
 int main()
-{    ars();
-    return 0;
+{
+  ars();
+  return 0;
 }
 
 
@@ -34,20 +35,20 @@ vector<bool> first, economy;
 CreatePlane(first, economy);
 displayPlaneChart(first, economy);
 int choice;
-int aseat;1
+int aseat;
 
     do {
         displayBookingMenu();
         choice = getMenuChoice();
-        if (choice !=3)
-        {
-        aseat = bookseat(first,economy,choice);
+        // if (choice !=3)
+        // {
+        aseat = bookseat(first, economy, choice);
         displayPlaneChart(first, economy);
-        printBoardingPass(first,economy,choice,aseat);
-        cout <<endl;
-        cout<< " Would you like to book another seat?"<<endl;
-        cout<<endl;
-    }
+        printBoardingPass(first, economy, choice, aseat);
+        cout << endl;
+        cout << "Would you like to book another seat?" << endl;
+        cout << endl;
+    // }
  }
  while (choice != 3);
 
@@ -55,44 +56,39 @@ int aseat;1
     exit(0);
 
 displayPlaneChart(first, economy);
-printBoardingPass(first,economy,choice,aseat);
+printBoardingPass(first, economy, choice, aseat);
 
 
 }
-void displayBookingMenu()
 
+void displayBookingMenu()
 {
-    cout<<"-----------------------------"<<endl;
-    cout<<"  Flight Booking Menu  "<<endl;
-    cout<<"-----------------------------"<<endl;
-    cout<<"1. First Class (seats 1 to 20) "<<endl;
-    cout<<"2. Economy Class (seats 21 to 50)"<<endl;
-    cout<<"3.Quit Menu! "<<endl;
+    cout << "------------------------------" << endl;
+    cout << "     Flight Booking Menu      " << endl;
+    cout << "------------------------------" << endl;
+    cout << "1. First Class (seats 1 to 20)" << endl;
+    cout << "2. Economy Class (seats 21 to 50)" << endl;
+    cout << "3. Quit Menu " << endl;
 
 }
 
 int getMenuChoice()
 {
-
     int choice;
 
-
-
-    cout<<"Enter Your Choice: ";
+    cout << "Enter Your Choice: ";
     cin >> choice;
 
     while((choice < 1 || choice > 3) && (!cin.fail()))
     {
-        cout<< "Try again. Enter either 1,2 or 3: ";
-        cin>> choice;
+        cout << "Please enter a valid number";
+        cin >> choice;
     }
     if(cin.fail())
         exit(1);
 
-
     return choice;
 }
-
 
 void createPlaneSection(vector<bool>& psection, int n)
 {
@@ -133,7 +129,7 @@ void displayPlaneChart(vector<bool> fc, vector<bool> ec)
     cout<<endl;
     cout<< "Plane Seating Chart: "<<endl;
     cout<<endl;
-    cout<<"First Class Chart: "<<endl;
+    cout<< "First Class Chart: "<<endl;
 
     displaySeatingSectionChart(fc,1);
     cout<< endl<<endl;
@@ -160,26 +156,26 @@ int reserveSeat(vector<bool>& v, int seat)
   int vsize = v.size();
   if((seat< 0) || (seat >= vsize))
   {
-      cout<<"Failed Reservations: "<<seat<<endl;
+      cout << "Failed Reservations: " << seat << endl;
       return (-1);
   }
   if(v.at(seat) == true)
   {
-      cout<< "Seat" << seat << "Is occupied." <<endl;
+      cout<< "Seat" << seat << "is occupied." <<endl;
       return(-1);
   }
   v.at(seat)= true;
   return 1;
  }
-//
+
 int bookseat(vector<bool>& fc, vector<bool>& ec, int choice)
 {
     int rseat;
 
-if (choice==1)
-    bookseat1(fc,ec, rseat,1);
-else
-    bookseat1 (ec,fc, rseat,2);
+    if (choice==1)
+      bookseat1(fc,ec, rseat,1);
+    else
+      bookseat1 (ec,fc, rseat,2);
     return rseat;
 }
 
@@ -189,9 +185,9 @@ bool isSeatEmpty(vector<bool> v, int s)
     if (s < 0 || s >= vsize )
        return false;
     if (v.at(s) == true)
-    {   cout <<endl;
-         cout<< "THIS SEAT IS TAKEN... SORRY! "<<endl;
-         cout <<endl;
+    {   cout << endl;
+         cout << "Sorry, this seat is unavailable." << endl;
+         cout << endl;
        return false;}
     else
         return true;
@@ -199,77 +195,74 @@ bool isSeatEmpty(vector<bool> v, int s)
 
 bool bookseat1(vector<bool>& fc, vector<bool>& ec, int& actualSeat, int choice)
 {
-    cout<< "what seat would you like? ";//try later
+    cout << "Which seat would you like? ";//try later
     int seat;  // maybe not needed!!!
     cin >> seat;// try later
     bool avail;
     avail = isSeatEmpty(fc, seat-1);
     if (avail)
-    {   if (choice ==1) {
-       actualSeat = seat-1;    /// THIS IS THE ISSUE
-       reserveSeat(fc, seat-1);/// Right here!!!
-       return true;
-    }
-    else{
-    actualSeat = seat-21;    /// THIS IS THE ISSUE
-    reserveSeat(fc, seat-21);/// Right here!!!
-    return true;
-    }
+    {
+      if (choice ==1) {
+        actualSeat = seat-1;    /// THIS IS THE ISSUE
+        reserveSeat(fc, seat-1);/// Right here!!!
+        return true;
+      }
+    else {
+      actualSeat = seat-21;    /// THIS IS THE ISSUE
+      reserveSeat(fc, seat-21);/// Right here!!!
+      return true;
+      }
     }
     seat = getEmptySeat(fc);
     if (seat == -1)
     {
-    cout<< "This section is taken, Would you like to try the other section? [y|n]: ";
+      cout << "This section is taken, would you like to try the other section? [y|n]: ";
     char answer;
-    cin>>answer;
+    cin >> answer;
     if (answer == 'y')
     {
         seat = getEmptySeat(ec);
         if (seat == -1)
-        {
-            cout<< "Unfortunatly The Flight is Full, Have fun waiting for the next one"<<endl;
+          {
+            cout<< "Sorry, this flight is fully booked." << endl;
             return false;
-        }
+          }
         actualSeat = seat;
         reserveSeat(ec,seat);
         return true;
     }
     else
-    {
-        cout<< "Have fun waiting for the next one!!!"<<endl;
+      {
+        cout << "Sorry, this flight is fully booked." << endl;
         return false;
+      }
     }
-    }
-
-
     return true;
 }
 
-
 void printBoardingPass(vector<bool> fc, vector<bool> ec, int choice, int seat)
+{
+  cout <<  endl;
+  cout << "    Airline Boarding Pass    " << endl;
+  cout << "-----------------------------" << endl;
+
+  if (choice == 1)
+  {
+    if (seat <= (fc.size() + 1))
     {
-cout <<  endl;
-cout << "CS 102 Airline Boarding Pass" << endl;
-cout << "----------------------------" << endl;
-
-
-      if (choice == 1)
-      {
-
-      if (seat <= (fc.size() + 1))
-      {
-        cout << "Class: ";
-        cout << "FIRST CLASS" << endl;
-        cout << "Seat Number: " << seat + 1 << endl;
-        cout << "Enjoy your flight!" << endl;
-      }
-      }
-    else {
-        if ((seat <= ec.size() + 1))
-      {
-        cout << "Class: ";
-        cout << "ECONOMY CLASS" << endl;
-        cout << "Seat Number: " << seat + 21 << endl;
-        cout << "Enjoy your flight!" << endl;
-      }
-}}
+      cout << "Class: ";
+      cout << "FIRST CLASS" << endl;
+      cout << "Seat Number: " << seat + 1 << endl;
+      cout << "Enjoy your flight!" << endl;
+    }
+  }
+  else {
+    if ((seat <= ec.size() + 1))
+    {
+      cout << "Class: ";
+      cout << "ECONOMY CLASS" << endl;
+      cout << "Seat Number: " << seat + 21 << endl;
+      cout << "Enjoy your flight!" << endl;
+    }
+  }
+}
